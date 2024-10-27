@@ -41,7 +41,46 @@ function updateDots() {
     }
 }
 
-function setResponsive(responsiveSettings) {
+function setResponsive() {
+
+    const responsiveSettings = [
+        {
+            breakpoint: 10,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+            }
+        },
+        {
+            breakpoint: 350,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+            }
+        },
+        {
+            breakpoint: 650,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+            }
+        },
+        {
+            breakpoint: 1100,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 4,
+            }
+        },
+        {
+            breakpoint: 1300,
+            settings: {
+                slidesToShow: 5,
+                slidesToScroll: 5,
+            }
+        }
+    ];
+
     responsiveSettings.forEach((resp) => {
         if (window.innerWidth >= resp.breakpoint) {
             slidesToShow = resp.settings.slidesToShow;
@@ -133,7 +172,7 @@ function nextSlide() {
 function prevSlide() {
     currentIndex -= slidesToScroll;
     if (currentIndex < 0) {
-        currentIndex = slides.length - slidesToShow; // Loop to the last full set of slides
+        currentIndex = slides.length - (slides.length % slidesToScroll || slidesToScroll);
     }
     updateSliderPosition();
 }
@@ -146,7 +185,7 @@ function attachEvents(prevArrowSelector, nextArrowSelector) {
 
     nextButton.addEventListener('click', nextSlide);
 
-    window.addEventListener('resize', () => setResponsive(responsiveSettings));
+    window.addEventListener('resize', () => setResponsive());
 
     if (dotsWrapper) {
         Array.from(dotsWrapper.children).forEach(dot => {
@@ -162,59 +201,21 @@ function autoSlide(autoplaySpeed) {
     setInterval(nextSlide, autoplaySpeed || 3000);
 }
 
-const responsiveSettings = [
-    {
-        breakpoint: 10,
-        settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-        }
-    },
-    {
-        breakpoint: 350,
-        settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-        }
-    },
-    {
-        breakpoint: 650,
-        settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-        }
-    },
-    {
-        breakpoint: 1100,
-        settings: {
-            slidesToShow: 4,
-            slidesToScroll: 4,
-        }
-    },
-    {
-        breakpoint: 1300,
-        settings: {
-            slidesToShow: 5,
-            slidesToScroll: 5,
-        }
-    }
-];
+
+
+setupSlider('.slides-container');
+buildDots('#featureddots');
+
+setResponsive();
+attachEvents('.arrow-left', '.arrow-right');
+// autoSlide(5000); // Optional: Enable auto sliding with speed in ms
+
 
 const productName = document.querySelectorAll(".product-name");
 
 productName.forEach((proName) => { 
     proName.textContent = proName.textContent.split(" ").slice(0,3).join(" ");
 });
-
-
-// Usage:
-setupSlider('.slides-container');
-buildDots('#featureddots');
-
-setResponsive(responsiveSettings);
-attachEvents('.arrow-left', '.arrow-right');
-// autoSlide(5000); // Optional: Enable auto sliding with speed in ms
-
 
 /*** REMOVE BACKGROUND ***/
 function removeBackground(imgElement, targetColor) {
