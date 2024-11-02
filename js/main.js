@@ -275,6 +275,8 @@ productImages.forEach(function (img) {
   img.parentNode.replaceChild(clonedImage, img);
 });
 
+
+/** add checked to products color **/
 document.querySelectorAll('.product-item').forEach(product => {
   const circles = product.querySelectorAll('.color-circle');
 
